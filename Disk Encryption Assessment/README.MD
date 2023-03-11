@@ -1,4 +1,4 @@
-# Active Probing Plugin Policies
+# Windows Disk Encryption Policy
 
 ## Use Case
 
