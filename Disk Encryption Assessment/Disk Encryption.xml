@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<RULES>
+    <RULE APP_VERSION="8.4.1-709" CACHE_TTL="259200" CACHE_TTL_SYNCED="true" CLASSIFICATION="REG_STATUS" DESCRIPTION="Edit for the corporate Disk Encryption software and drive letter.&#10;&#10;The main rule is configured to filter based on Laptops, so if required on devices other than laptops, adjust or remove the main rule. " ENABLED="true" ID="-806700950974531132" META_TYPE="COMPLY" NAME="1.3.1.03 Disk Encryption Assessment &lt;edit encryption software&gt;" NOT_COND_UPDATE="true" UPGRADE_PERFORMED="true">
+        <GROUP_IN_FILTER>
+            <GROUP ID="844140514704463035" NAME="P-Windows SecureConnector Manageable"/>
+            <GROUP ID="6693936134450316378" NAME="P-Windows Domain Manageable"/>
+        </GROUP_IN_FILTER>
+        <INACTIVITY_TTL TTL="0" USE_DEFAULT="true"/>
+        <ADMISSION_RESOLVE_DELAY TTL="0" USE_DEFAULT="true"/>
+        <MATCH_TIMING RATE="28800" SKIP_INACTIVE="true">
+            <ADMISSION ALL="true"/>
+        </MATCH_TIMING>
+        <EXCEPTION NAME="nbthost" UNKNOWN_EVAL="UNMATCH"/>
+        <EXCEPTION NAME="ip" UNKNOWN_EVAL="UNMATCH"/>
+        <EXCEPTION NAME="user" UNKNOWN_EVAL="UNMATCH"/>
+        <EXCEPTION NAME="mac" UNKNOWN_EVAL="UNMATCH"/>
+        <EXCEPTION NAME="group" UNKNOWN_EVAL="UNMATCH">
+            <GROUP ID="80076953748521003" NAME="Passive Exclusion"/>
+        </EXCEPTION>
+        <ORIGIN NAME="CUSTOM"/>
+        <UNMATCH_TIMING RATE="28800" SKIP_INACTIVE="true">
+            <ADMISSION ALL="true"/>
+        </UNMATCH_TIMING>
+        <SEGMENT ID="9054835812585853831" NAME="In-Scope">
+            <RANGE FROM="10.0.0.0" TO="10.255.255.255"/>
+            <RANGE FROM="172.16.0.0" TO="172.31.255.255"/>
+            <RANGE FROM="192.168.0.0" TO="192.168.255.255"/>
+        </SEGMENT>
+        <RULE_CHAIN>
+            <INNER_RULE APP_VERSION="8.4.1-709" CACHE_TTL="259200" CACHE_TTL_SYNCED="true" CLASSIFICATION="REG_STATUS" DESCRIPTION="" ID="-7804064788537997442" NAME="Disk Encryption Installed and Fully Encrypted" NOT_COND_UPDATE="true" RECHECK_MAIN_RULE_DEF="true">
+                <MATCH_TIMING RATE="28800" SKIP_INACTIVE="true">
+                    <ADMISSION ALL="true"/>
+                </MATCH_TIMING>
+                <META_TYPE STATE="COMPLY"/>
+                <EXPRESSION EXPR_TYPE="OR">
+                    <!--Rule expression. Rule name is: Disk Encryption Installed and Fully Encrypted-->
+                    <EXPRESSION EXPR_TYPE="SIMPLE">
+                        <CONDITION EMPTY_LIST_VALUE="false" FIELD_NAME="hd_comp_state" LABEL="Windows Hard Drive Encryption State" LEFT_PARENTHESIS="0" LOGIC="OR" PLUGIN_NAME="Data Simulator" PLUGIN_UNIQUE_NAME="random_data" PLUGIN_VESRION="3.0.1" PLUGIN_VESRION_NUMBER="300000058" RET_VALUE_ON_UKNOWN="UNMATCH" RIGHT_PARENTHESIS="0">
+                            <FILTER COMP_FIELD_NAME="hd_comp_state" FILTER_ID="4128508697155872104">
+                                <SUB_FILTER CASE_SENSITIVE="false" HAS_VALUE="true" MEETS="true" SUB_FIELD_NAME="hd_drive_name" TYPE="any">
+                                    <VALUE VALUE2="Any"/>
+                                </SUB_FILTER>
+                                <SUB_FILTER AUTO_UPDATE="true" HAS_VALUE="true" MEETS="true" OPTIONS_DIGEST="47f1209afc455762bd23ca59a9f48b07" SUB_FIELD_NAME="hd_app_name">
+                                    <OPT VALUE="bitlocker"/>
+                                    <OPT VALUE="symantec_hd"/>
+                                    <OPT VALUE="checkpoint"/>
+                                </SUB_FILTER>
+                                <SUB_FILTER AUTO_UPDATE="false" HAS_VALUE="true" MEETS="true" OPTIONS_DIGEST="2f864430ee413f6442f4c03d098844a4" SUB_FIELD_NAME="hd_drive_state">
+                                    <OPT VALUE="1"/>
+                                </SUB_FILTER>
+                            </FILTER>
+                        </CONDITION>
+                    </EXPRESSION>
+                    <EXPRESSION EXPR_TYPE="SIMPLE">
+                        <CONDITION EMPTY_LIST_VALUE="false" FIELD_NAME="script_result.0f3ace322044b77fd974acafef3076b9" LABEL="Windows Expected Script Result Command or Script file:manage-bde -status, Run Interactive:false" LEFT_PARENTHESIS="0" LOGIC="AND" PLUGIN_NAME="Data Simulator" PLUGIN_UNIQUE_NAME="random_data" PLUGIN_VESRION="3.0.1" PLUGIN_VESRION_NUMBER="300000058" RET_VALUE_ON_UKNOWN="UNMATCH" RIGHT_PARENTHESIS="0">
+                            <FIELD METANAME="script_result" NAME="script_result.0f3ace322044b77fd974acafef3076b9">
+                                <PARAM NAME="script_howtorun_prop" TYPE="string" VALUE="manage-bde -status"/>
+                                <PARAM NAME="script_interactive" TYPE="string" VALUE="false"/>
+                            </FIELD>
+                            <FILTER CASE_SENSITIVE="false" FILTER_ID="-6119313584926753673" TYPE="contains">
+                                <VALUE VALUE2="Fully Encrypted"/>
+                            </FILTER>
+                        </CONDITION>
+                    </EXPRESSION>
+                </EXPRESSION>
+            </INNER_RULE>
+            <INNER_RULE APP_VERSION="8.4.1-709" CACHE_TTL="259200" CACHE_TTL_SYNCED="true" CLASSIFICATION="REG_STATUS" DESCRIPTION="" ID="5588454593850196082" NAME="Disk Encryption Installed and Not Encrypted" NOT_COND_UPDATE="true" RECHECK_MAIN_RULE_DEF="true">
+                <MATCH_TIMING RATE="28800" SKIP_INACTIVE="true">
+                    <ADMISSION ALL="true"/>
+                </MATCH_TIMING>
+                <META_TYPE STATE="NOT_COMPLY"/>
+                <EXPRESSION EXPR_TYPE="OR">
+                    <!--Rule expression. Rule name is: Disk Encryption Installed and Not Encrypted-->
+                    <EXPRESSION EXPR_TYPE="SIMPLE">
+                        <CONDITION EMPTY_LIST_VALUE="false" FIELD_NAME="hd_comp_state" LABEL="Windows Hard Drive Encryption State" LEFT_PARENTHESIS="0" LOGIC="OR" PLUGIN_NAME="Data Simulator" PLUGIN_UNIQUE_NAME="random_data" PLUGIN_VESRION="3.0.1" PLUGIN_VESRION_NUMBER="300000058" RET_VALUE_ON_UKNOWN="UNMATCH" RIGHT_PARENTHESIS="0">
+                            <FILTER COMP_FIELD_NAME="hd_comp_state" FILTER_ID="6533556348649474702">
+                                <SUB_FILTER CASE_SENSITIVE="false" HAS_VALUE="true" MEETS="true" SUB_FIELD_NAME="hd_drive_name" TYPE="any">
+                                    <VALUE VALUE2="Any"/>
+                                </SUB_FILTER>
+                                <SUB_FILTER AUTO_UPDATE="true" HAS_VALUE="true" MEETS="true" OPTIONS_DIGEST="47f1209afc455762bd23ca59a9f48b07" SUB_FIELD_NAME="hd_app_name">
+                                    <OPT VALUE="bitlocker"/>
+                                    <OPT VALUE="symantec_hd"/>
+                                    <OPT VALUE="checkpoint"/>
+                                </SUB_FILTER>
+                                <SUB_FILTER AUTO_UPDATE="false" HAS_VALUE="true" MEETS="true" OPTIONS_DIGEST="2f864430ee413f6442f4c03d098844a4" SUB_FIELD_NAME="hd_drive_state">
+                                    <OPT VALUE="0"/>
+                                </SUB_FILTER>
+                            </FILTER>
+                        </CONDITION>
+                    </EXPRESSION>
+                    <EXPRESSION EXPR_TYPE="SIMPLE">
+                        <CONDITION EMPTY_LIST_VALUE="false" FIELD_NAME="hd_installed_new" LABEL="Windows Hard Drive Encryption Installed" LEFT_PARENTHESIS="0" LOGIC="OR" PLUGIN_NAME="Data Simulator" PLUGIN_UNIQUE_NAME="random_data" PLUGIN_VESRION="3.0.1" PLUGIN_VESRION_NUMBER="300000058" RET_VALUE_ON_UKNOWN="UNMATCH" RIGHT_PARENTHESIS="0">
+                            <FILTER AUTO_UPDATE="false" FILTER_ID="-2450931746625075717" OPTIONS_DIGEST="47f1209afc455762bd23ca59a9f48b07">
+                                <OPT VALUE="bitlocker"/>
+                            </FILTER>
+                        </CONDITION>
+                    </EXPRESSION>
+                    <EXPRESSION EXPR_TYPE="SIMPLE">
+                        <CONDITION EMPTY_LIST_VALUE="false" FIELD_NAME="script_result.0f3ace322044b77fd974acafef3076b9" LABEL="Windows Expected Script Result Command or Script file:manage-bde -status, Run Interactive:false" LEFT_PARENTHESIS="0" LOGIC="AND" PLUGIN_NAME="Data Simulator" PLUGIN_UNIQUE_NAME="random_data" PLUGIN_VESRION="3.0.1" PLUGIN_VESRION_NUMBER="300000058" RET_VALUE_ON_UKNOWN="UNMATCH" RIGHT_PARENTHESIS="0">
+                            <FIELD METANAME="script_result" NAME="script_result.0f3ace322044b77fd974acafef3076b9">
+                                <PARAM NAME="script_howtorun_prop" TYPE="string" VALUE="manage-bde -status"/>
+                                <PARAM NAME="script_interactive" TYPE="string" VALUE="false"/>
+                            </FIELD>
+                            <FILTER CASE_SENSITIVE="false" FILTER_ID="1927730363440234668" TYPE="contains">
+                                <VALUE VALUE2="Fully Decrypted"/>
+                            </FILTER>
+                        </CONDITION>
+                    </EXPRESSION>
+                </EXPRESSION>
+                <ACTION DISABLED="true" NAME="add-to-group">
+                    <PARAM NAME="temporary" VALUE="true"/>
+                    <PARAM NAME="group-name" VALUE="id:6231128760813033318;name:P-Disk Encryption Non Compliant"/>
+                    <PARAM NAME="item_key" VALUE="mac_or_ip"/>
+                    <PARAM NAME="comment" VALUE=""/>
+                    <SCHEDULE>
+                        <START Class="Immediately"/>
+                        <OCCURENCE onStart="true"/>
+                    </SCHEDULE>
+                </ACTION>
+                <ACTION DISABLED="true" NAME="sendmail">
+                    <PARAM NAME="signature" VALUE="default"/>
+                    <PARAM NAME="subject" VALUE="Forescout: Disk NOT Encrypted"/>
+                    <PARAM NAME="to" VALUE="se_acceleration@forescout.com"/>
+                    <PARAM NAME="message" VALUE="Hello,&#10;&#10;Forescout has detected that the following device(s) have encryption software installed but the hard drive is NOT encrypted:&#10;&#10;{hd_installed_new} &#10;{hd_comp_state}&#10;&#10;Detected by the following policy:&#10;{policy}&#10;&#10;User Information:&#10;&#10;Logged in User:&#9;&#9;{user}&#10;Display Name:&#9;&#9;{ad_displayname}&#10;LDAP Username:&#9;{ad_name}&#10;Title:&#9;&#9;{ad_title}&#10;AD Department:&#9;{ad_department}&#10;AD Groups:&#9;&#9;{ad_memberof}&#10;Phone Number:&#9;&#9;{ad_telephonenumber}&#10;Email:&#9;&#9;{ad_mail}&#10;&#10;&#10;Device Information:&#10;&#10;IP Address: &#9;&#9;{ip}&#10;MAC Address: &#9;&#9;{mac}&#10;Hostname:&#9;&#9;{nbtdomain}/{nbthost}&#10;DNS Name:&#9;&#9;{hostname}&#10;Function:&#9;&#9;{prim_classification}&#10;OS:&#9;&#9;{os_classification}&#10;Switch Info:&#9;&#9;{sw_ipport_desc}&#10;WiFi AP IP:&#9;&#9;{wifi_ip}&#10;SSID:&#9;&#9;{wifi_ssid}&#10;Admission:&#9;&#9;{adm}&#10;&#10;&#10;Compliance / Status Information:&#10;&#10;Actions Applied:&#9;{nc_applied_actions}&#10;Labels: &#9;&#9;{goodies_label_list}&#10;AntiVirus:&#9;&#9;{av_active_new}&#10;Cloud Storage:&#9;&#9;{cloud_application_running}&#10;P2P:&#9;&#9;{p2p_running}&#10;IM:&#9;&#9;{IM_running}&#10;Vulnerabilities:&#9;&#9;{vulns_comp}&#10;Processes:&#9;&#9;{process_no_ext}&#10;Services:&#9;&#9;{service}&#10;Applications:&#9;&#9;{comp_application}"/>
+                    <PARAM NAME="aggregate" VALUE="false"/>
+                    <SCHEDULE>
+                        <START Class="Delayed" TIMEPERIOD="10 SECOND"/>
+                        <OCCURENCE onStart="true"/>
+                    </SCHEDULE>
+                </ACTION>
+            </INNER_RULE>
+            <INNER_RULE APP_VERSION="8.4.1-709" CACHE_TTL="259200" CACHE_TTL_SYNCED="true" CLASSIFICATION="REG_STATUS" DESCRIPTION="" ID="-3501663095162173576" NAME="Disk Encryption Not installed" NOT_COND_UPDATE="true" RECHECK_MAIN_RULE_DEF="true">
+                <MATCH_TIMING RATE="28800" SKIP_INACTIVE="true">
+                    <ADMISSION ALL="true"/>
+                </MATCH_TIMING>
+                <META_TYPE STATE="NOT_COMPLY"/>
+                <EXPRESSION EXPR_TYPE="NOT">
+                    <!--Rule expression. Rule name is: Disk Encryption Not installed-->
+                    <EXPRESSION EXPR_TYPE="SIMPLE">
+                        <CONDITION EMPTY_LIST_VALUE="false" FIELD_NAME="hd_installed_new" INNER_NOT="true" LABEL="Windows Hard Drive Encryption Installed" LEFT_PARENTHESIS="0" LOGIC="AND" PLUGIN_NAME="Data Simulator" PLUGIN_UNIQUE_NAME="random_data" PLUGIN_VESRION="3.0.1" PLUGIN_VESRION_NUMBER="300000058" RET_VALUE_ON_UKNOWN="UNMATCH" RIGHT_PARENTHESIS="0">
+                            <FILTER AUTO_UPDATE="true" FILTER_ID="8417115289304475118" OPTIONS_DIGEST="47f1209afc455762bd23ca59a9f48b07">
+                                <OPT VALUE="checkpoint"/>
+                                <OPT VALUE="symantec_hd"/>
+                                <OPT VALUE="bitlocker"/>
+                            </FILTER>
+                        </CONDITION>
+                    </EXPRESSION>
+                </EXPRESSION>
+                <ACTION DISABLED="true" NAME="add-to-group">
+                    <PARAM NAME="temporary" VALUE="true"/>
+                    <PARAM NAME="group-name" VALUE="id:6231128760813033318;name:P-Disk Encryption Non Compliant"/>
+                    <PARAM NAME="item_key" VALUE="mac_or_ip"/>
+                    <PARAM NAME="comment" VALUE=""/>
+                    <SCHEDULE>
+                        <START Class="Immediately"/>
+                        <OCCURENCE onStart="true"/>
+                    </SCHEDULE>
+                </ACTION>
+                <ACTION DISABLED="true" NAME="sendmail">
+                    <PARAM NAME="signature" VALUE="default"/>
+                    <PARAM NAME="subject" VALUE="Forescout: No Disk Encryption Software"/>
+                    <PARAM NAME="to" VALUE="se_acceleration@forescout.com"/>
+                    <PARAM NAME="message" VALUE="Hello,&#10;&#10;Forescout has detected that the following device(s) do NOT have encryption software installed:&#10;&#10;{hd_installed_new} &#10;{hd_comp_state}&#10;&#10;Detected by the following policy:&#10;{policy}&#10;&#10;User Information:&#10;&#10;Logged in User:&#9;&#9;{user}&#10;Display Name:&#9;&#9;{ad_displayname}&#10;LDAP Username:&#9;{ad_name}&#10;Title:&#9;&#9;{ad_title}&#10;AD Department:&#9;{ad_department}&#10;AD Groups:&#9;&#9;{ad_memberof}&#10;Phone Number:&#9;&#9;{ad_telephonenumber}&#10;Email:&#9;&#9;{ad_mail}&#10;&#10;&#10;Device Information:&#10;&#10;IP Address: &#9;&#9;{ip}&#10;MAC Address: &#9;&#9;{mac}&#10;Hostname:&#9;&#9;{nbtdomain}/{nbthost}&#10;DNS Name:&#9;&#9;{hostname}&#10;Function:&#9;&#9;{prim_classification}&#10;OS:&#9;&#9;{os_classification}&#10;Switch Info:&#9;&#9;{sw_ipport_desc}&#10;WiFi AP IP:&#9;&#9;{wifi_ip}&#10;SSID:&#9;&#9;{wifi_ssid}&#10;Admission:&#9;&#9;{adm}&#10;&#10;&#10;Compliance / Status Information:&#10;&#10;Actions Applied:&#9;{nc_applied_actions}&#10;Labels: &#9;&#9;{goodies_label_list}&#10;AntiVirus:&#9;&#9;{av_active_new}&#10;Cloud Storage:&#9;&#9;{cloud_application_running}&#10;P2P:&#9;&#9;{p2p_running}&#10;IM:&#9;&#9;{IM_running}&#10;Vulnerabilities:&#9;&#9;{vulns_comp}&#10;Processes:&#9;&#9;{process_no_ext}&#10;Services:&#9;&#9;{service}&#10;Applications:&#9;&#9;{comp_application}"/>
+                    <PARAM NAME="aggregate" VALUE="false"/>
+                    <SCHEDULE>
+                        <START Class="Delayed" TIMEPERIOD="10 SECOND"/>
+                        <OCCURENCE onStart="true"/>
+                    </SCHEDULE>
+                </ACTION>
+            </INNER_RULE>
+            <INNER_RULE APP_VERSION="8.4.1-709" CACHE_TTL="259200" CACHE_TTL_SYNCED="true" CLASSIFICATION="REG_STATUS" DESCRIPTION="" ID="-5557909267845278749" NAME="Disk Encryption Irresolvable" NOT_COND_UPDATE="true" RECHECK_MAIN_RULE_DEF="true">
+                <MATCH_TIMING RATE="28800" SKIP_INACTIVE="true">
+                    <ADMISSION ALL="true"/>
+                </MATCH_TIMING>
+                <META_TYPE STATE="NOT_COMPLY"/>
+                <ACTION DISABLED="true" NAME="add-to-group">
+                    <PARAM NAME="temporary" VALUE="true"/>
+                    <PARAM NAME="group-name" VALUE="id:6231128760813033318;name:P-Disk Encryption Non Compliant"/>
+                    <PARAM NAME="item_key" VALUE="mac_or_ip"/>
+                    <PARAM NAME="comment" VALUE=""/>
+                    <SCHEDULE>
+                        <START Class="Immediately"/>
+                        <OCCURENCE onStart="true"/>
+                    </SCHEDULE>
+                </ACTION>
+            </INNER_RULE>
+        </RULE_CHAIN>
+        <REPORT_TABLES/>
+    </RULE>
+</RULES>
