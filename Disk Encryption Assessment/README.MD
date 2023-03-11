@@ -17,7 +17,24 @@ The following Command Line script ended up giving us the correct results and thi
   
   Example Results:
     
-    ![image](https://user-images.githubusercontent.com/116924788/224457468-f55817b5-df1f-43f3-bcd1-76be5bcd1f00.png)
+	C:\WINDOWS\system32>manage-bde -status
+	BitLocker Drive Encryption: Configuration Tool version 10.0.19041
+	Copyright (C) 2013 Microsoft Corporation. All rights reserved.
+
+	Disk volumes that can be protected with
+	BitLocker Drive Encryption:
+	Volume C: []
+	[OS Volume]
+
+	    Size:                 78.68 GB
+	    BitLocker Version:    None
+	    Conversion Status:    Fully Decrypted
+	    Percentage Encrypted: 0.0%
+	    Encryption Method:    None
+	    Protection Status:    Protection Off
+	    Lock Status:          Unlocked
+	    Identification Field: None
+	    Key Protectors:       None Found
 
 In additon, on the Sub-Rule detecting if the Encryption Software was Installed but NOT Encrypted, we made this an OR statement and added the condition to validate just if BitLocker was installed. 
 
